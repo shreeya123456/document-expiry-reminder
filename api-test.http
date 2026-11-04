@@ -1,0 +1,38 @@
+
+### 1. Get all documents
+GET http://127.0.0.1:8000/api/documents
+Accept: application/json
+### 2. Add a document
+POST http://127.0.0.1:8000/api/documents
+Content-Type: application/json
+Accept: application/json
+
+{
+    "document_name": "Citizenship",
+    "document_type": "Identity",
+    "document_number": "123456789",
+    "issue_date": "2020-01-01",
+    "expiry_date": "2030-01-01",
+    "reminder_days": 30
+}
+### 3. Get one document
+GET http://127.0.0.1:8000/api/documents/1
+Accept: application/json
+
+### 4. Update a document
+PUT http://127.0.0.1:8000/api/documents/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "document_name": "National ID",
+    "document_type": "Identity",
+    "document_number": "123456789",
+    "issue_date": "2020-01-01",
+    "expiry_date": "2030-01-01",
+    "reminder_days": 30
+}
+
+### 5. Delete a document
+DELETE http://127.0.0.1:8000/api/documents/1
+Accept: application/json
