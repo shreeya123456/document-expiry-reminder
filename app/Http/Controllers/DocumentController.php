@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
-    public function index()
+    // Get all documents of logged-in user
+    public function index(Request $request)
     {
-        return response()->json(Document::latest()->get());
+        return response()->json(
+            $request->user()->documents()->latest()->get()
+        );
     }
 
+    // Add a document
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -23,7 +27,7 @@ class DocumentController extends Controller
             'reminder_days' => 'nullable|integer|min:1',
         ]);
 
-        $document = Document::create($validated);
+        $document = $request->user()->documents()->create($validated);
 
         return response()->json([
             'message' => 'Document added successfully!',
@@ -31,14 +35,18 @@ class DocumentController extends Controller
         ], 201);
     }
 
-    public function show($id)
+    // Get one document
+    public function show(Request $request, $id)
     {
-        return response()->json(Document::findOrFail($id));
+        $document = $request->user()->documents()->findOrFail($id);
+
+        return response()->json($document);
     }
 
+    // Update a document
     public function update(Request $request, $id)
     {
-        $document = Document::findOrFail($id);
+        $document = $request->user()->documents()->findOrFail($id);
 
         $validated = $request->validate([
             'document_name' => 'sometimes|required|string|max:255',
@@ -57,13 +65,85 @@ class DocumentController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    // Delete a document
+    public function destroy(Request $request, $id)
     {
-        $document = Document::findOrFail($id);
+        $document = $request->user()->documents()->findOrFail($id);
+
         $document->delete();
 
         return response()->json([
             'message' => 'Document deleted successfully!'
         ]);
     }
+
+    // Get documents expiring within 30 days
+    public function upcoming(Request $request)
+    {
+        $today = now()->toDateString();
+        $next30Days = now()->addDays(30)->toDateString();
+
+        $documents = $request->user()->documents()
+            ->whereDate('expiry_date', '>=', $today)
+            ->whereDate('expiry_date', '<=', $next30Days)
+            ->get();
+
+        $documents->each(function ($document) {
+            $document->setAttribute(
+                'expiry_status',
+                $document->getExpiryStatus()
+            );
+        });
+
+        return response()->json($documents);
+    }
+
+    // Get expired documents
+    public function expired(Request $request)
+    {
+        $today = now()->toDateString();
+
+        $documents = $request->user()->documents()
+            ->whereDate('expiry_date', '<', $today)
+            ->get();
+
+        $documents->each(function ($document) {
+            $document->setAttribute(
+                'expiry_status',
+                $document->getExpiryStatus()
+            );
+        });
+
+        return response()->json($documents);
+    }
+    // Get dashboard statistics
+public function statistics(Request $request)
+{
+    $documents = $request->user()->documents();
+
+    $today = now()->toDateString();
+    $next30Days = now()->addDays(30)->toDateString();
+
+    $total = (clone $documents)->count();
+
+    $expired = (clone $documents)
+        ->whereDate('expiry_date', '<', $today)
+        ->count();
+
+    $expiringSoon = (clone $documents)
+        ->whereDate('expiry_date', '>=', $today)
+        ->whereDate('expiry_date', '<=', $next30Days)
+        ->count();
+
+    $active = (clone $documents)
+        ->whereDate('expiry_date', '>', $next30Days)
+        ->count();
+
+    return response()->json([
+        'total_documents' => $total,
+        'active_documents' => $active,
+        'expired_documents' => $expired,
+        'expiring_soon' => $expiringSoon,
+    ]);
+}
 }
