@@ -15,122 +15,448 @@
         }
 
         body {
-            background: #f1f5f9;
+            background: #f5f7fc;
+            color: #1e293b;
         }
 
-        header {
-            background: #1e40af;
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 245px;
+            background: #172554;
             color: white;
+            padding: 28px 18px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+            padding: 0 10px 35px;
+            line-height: 1.5;
+        }
+
+        .brand span {
+            color: #93c5fd;
+        }
+
+        .menu-title {
+            color: #94a3b8;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 13px 14px;
+            margin-bottom: 8px;
+            color: #dbeafe;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .menu a.active,
+        .menu a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: 55px;
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+        }
+
+        .sidebar-bottom button {
+            width: 100%;
+            background: #dc2626;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            background: white;
             padding: 20px 35px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
         }
 
-        .container {
+        .topbar h3 {
+            color: #172554;
+            font-size: 20px;
+        }
+
+        .user-label {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .content {
             padding: 35px;
         }
 
-        h2 {
-            color: #1e293b;
-            margin-bottom: 10px;
+        .welcome {
+            margin-bottom: 28px;
         }
 
-        .subtitle {
+        .welcome h1 {
+            font-size: 27px;
+            color: #172554;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
             color: #64748b;
-            margin-bottom: 30px;
+            font-size: 14px;
         }
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
-        }
-
-        .card h3 {
-            color: #64748b;
-            font-size: 15px;
-            margin-bottom: 15px;
-        }
-
-        .card p {
-            font-size: 30px;
-            font-weight: bold;
-            color: #1e40af;
-        }
-
+        /* Buttons */
         button {
-            padding: 10px 18px;
-            background: #ef4444;
-            color: white;
             border: none;
-            border-radius: 6px;
+            padding: 11px 17px;
+            border-radius: 7px;
+            color: white;
             cursor: pointer;
-            margin: 3px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.2s;
         }
 
         button:hover {
             opacity: 0.85;
+            transform: translateY(-1px);
         }
 
-        label {
+        .primary-btn {
+            background: #2563eb;
+        }
+
+        .edit-btn {
+            background: #0d9488;
+            padding: 8px 12px;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            padding: 8px 12px;
+        }
+
+        /* Statistics */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 23px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(15,23,42,0.04);
+            border: 1px solid #eef2f7;
+            border-left: 4px solid #2563eb;
+        }
+
+        .stat-card.active-card {
+            border-left-color: #16a34a;
+        }
+
+        .stat-card.upcoming-card {
+            border-left-color: #f59e0b;
+        }
+
+        .stat-card.expired-card {
+            border-left-color: #ef4444;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .stat-card h3 {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #dbeafe;
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        .active-card .stat-icon {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .upcoming-card .stat-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .expired-card .stat-icon {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .stat-card p {
+            font-size: 30px;
+            font-weight: bold;
+            color: #172554;
+        }
+
+        /* General panels */
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(15,23,42,0.04);
+            border: 1px solid #eef2f7;
+            margin-bottom: 28px;
+        }
+
+        .panel-heading {
+            margin-bottom: 22px;
+        }
+
+        .panel-heading h2 {
+            font-size: 19px;
+            color: #172554;
+            margin-bottom: 6px;
+        }
+
+        .panel-heading p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group label {
             display: block;
-            margin-top: 15px;
-            margin-bottom: 7px;
-            color: #334155;
-            font-size: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 8px;
         }
 
         input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 13px;
             border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            border-radius: 7px;
             font-size: 14px;
-            margin-bottom: 8px;
+            outline: none;
+            background: #fff;
         }
 
-        #documentForm button {
-            margin-top: 15px;
-            background: #2563eb;
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .form-actions {
+            margin-top: 22px;
         }
 
         #documentMessage {
             margin-top: 15px;
-            font-size: 14px;
+            font-size: 13px;
+        }
+
+        /* Search */
+        .table-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            max-width: 260px;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            text-align: left;
+            min-width: 850px;
         }
 
         th {
-            background: #e2e8f0;
-            color: #1e293b;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 15px 12px;
+            text-align: left;
         }
 
-        @media (max-width: 600px) {
-            header {
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Expiry status */
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-upcoming {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+        }
+
+        footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 15px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1000px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
                 padding: 18px;
             }
 
-            .container {
-                padding: 20px;
+            .brand {
+                padding-bottom: 15px;
+            }
+
+            .menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .menu a {
+                margin: 0;
+                padding: 10px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .sidebar-bottom button {
+                width: auto;
+            }
+
+            .topbar {
+                padding: 17px;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card p {
+                font-size: 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .table-heading {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .search-box {
+                max-width: 100%;
             }
         }
     </style>
@@ -138,110 +464,194 @@
 
 <body>
 
-<header>
-    <h2 style="color:white; margin:0;">Document Reminder</h2>
-    <button onclick="logout()">Logout</button>
-</header>
+<div class="layout">
 
-<div class="container">
+    <aside class="sidebar">
 
-    <h2>Welcome to Your Dashboard!</h2>
-    <p class="subtitle">Manage your important documents in one place.</p>
-
-    <!-- Dashboard Statistics -->
-    <div class="cards">
-
-        <div class="card">
-            <h3>Total Documents</h3>
-            <p id="total">0</p>
+        <div class="brand">
+            DOCUMENT<br>
+            <span>REMINDER</span>
         </div>
 
-        <div class="card">
-            <h3>Active Documents</h3>
-            <p id="active">0</p>
+        <p class="menu-title">MAIN MENU</p>
+
+        <nav class="menu">
+            <a href="#dashboard" class="active">▦ Dashboard</a>
+            <a href="#add-document">＋ Add Document</a>
+            <a href="#my-documents">▤ My Documents</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button onclick="logout()">Logout</button>
         </div>
 
-        <div class="card">
-            <h3>Expiring Soon</h3>
-            <p id="upcoming">0</p>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <h3>Dashboard</h3>
+            <span class="user-label">Document Management System</span>
+        </header>
+
+        <div class="content" id="dashboard">
+
+            <section class="welcome">
+                <h1>Welcome to Your Dashboard!</h1>
+                <p>Manage and track all your important documents in one place.</p>
+            </section>
+
+            <!-- Statistics -->
+            <section class="cards">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <h3>Total Documents</h3>
+                        <div class="stat-icon">▤</div>
+                    </div>
+                    <p id="total">0</p>
+                </div>
+
+                <div class="stat-card active-card">
+                    <div class="stat-top">
+                        <h3>Active Documents</h3>
+                        <div class="stat-icon">✓</div>
+                    </div>
+                    <p id="active">0</p>
+                </div>
+
+                <div class="stat-card upcoming-card">
+                    <div class="stat-top">
+                        <h3>Expiring Soon</h3>
+                        <div class="stat-icon">◷</div>
+                    </div>
+                    <p id="upcoming">0</p>
+                </div>
+
+                <div class="stat-card expired-card">
+                    <div class="stat-top">
+                        <h3>Expired Documents</h3>
+                        <div class="stat-icon">!</div>
+                    </div>
+                    <p id="expired">0</p>
+                </div>
+
+            </section>
+
+            <!-- Add Document -->
+            <section class="panel" id="add-document">
+
+                <div class="panel-heading">
+                    <h2>＋ Add New Document</h2>
+                    <p>Enter your document information below.</p>
+                </div>
+
+                <form id="documentForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Document Name *</label>
+                            <input type="text" name="document_name"
+                                placeholder="e.g. Passport" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Document Type *</label>
+                            <input type="text" name="document_type"
+                                placeholder="e.g. Personal" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Document Number</label>
+                            <input type="text" name="document_number"
+                                placeholder="Enter document number">
+                        </div>
+
+                        <div class="form-group">
+    <label>Issue Date</label>
+    <input type="date" name="issue_date" id="issue_date">
+</div>
+
+<div class="form-group">
+    <label>Expiry Date *</label>
+    <input type="date" name="expiry_date" id="expiry_date" required>
+</div>
+
+                        <div class="form-group">
+                            <label>Reminder Days *</label>
+                            <input type="number" name="reminder_days"
+                                value="30" min="1" required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="primary-btn">
+                            Add Document
+                        </button>
+                    </div>
+
+                </form>
+
+                <p id="documentMessage"></p>
+
+            </section>
+
+            <!-- My Documents -->
+            <section class="panel" id="my-documents">
+
+                <div class="table-heading">
+
+                    <div class="panel-heading" style="margin:0;">
+                        <h2>My Documents</h2>
+                        <p>View and manage your saved documents.</p>
+                    </div>
+
+                    <input type="text" id="searchInput"
+                        class="search-box"
+                        placeholder="Search documents...">
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table id="documentsTable">
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Document Number</th>
+                                <th>Issue Date</th>
+                                <th>Expiry Date</th>
+                                <th>Days Remaining</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="documentsList">
+                            <tr>
+                                <td colspan="8" class="empty-message">
+                                    Loading documents...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
         </div>
 
-        <div class="card">
-            <h3>Expired Documents</h3>
-            <p id="expired">0</p>
-        </div>
+        <footer>
+            Document Expiry Reminder System | © 2026
+        </footer>
 
-    </div>
-
-    <br><br>
-
-    <!-- Add Document Form -->
-    <div class="card">
-        <h2>Add New Document</h2>
-
-        <form id="documentForm">
-
-            <label>Document Name</label>
-            <input type="text" name="document_name"
-                   placeholder="e.g. Passport" required>
-
-            <label>Document Type</label>
-            <input type="text" name="document_type"
-                   placeholder="e.g. Personal" required>
-
-            <label>Document Number</label>
-            <input type="text" name="document_number"
-                   placeholder="Enter document number">
-
-            <label>Issue Date</label>
-            <input type="date" name="issue_date">
-
-            <label>Expiry Date</label>
-            <input type="date" name="expiry_date" required>
-
-            <label>Reminder Days</label>
-            <input type="number" name="reminder_days"
-                   value="30" min="1" required>
-
-            <button type="submit">Add Document</button>
-
-        </form>
-
-        <p id="documentMessage"></p>
-    </div>
-
-    <br><br>
-
-    <!-- My Documents Table -->
-    <div class="card">
-        <h2>My Documents</h2>
-
-        <div style="overflow-x:auto;">
-
-            <table border="1" cellpadding="10" cellspacing="0"
-                   id="documentsTable">
-
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Document Number</th>
-                        <th>Issue Date</th>
-                        <th>Expiry Date</th>
-                        <th>Reminder Days</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody id="documentsList">
-                    <tr>
-                        <td colspan="7">Loading documents...</td>
-                    </tr>
-                </tbody>
-
-            </table>
-        </div>
-    </div>
+    </main>
 
 </div>
 
@@ -256,10 +666,10 @@
 
     // Read JSON response safely
     async function readJson(response) {
+
         let raw = await response.text();
 
         raw = raw.trim();
-
         raw = raw.replace(/^\\+/, '');
 
         let result = JSON.parse(raw);
@@ -271,9 +681,11 @@
         return result;
     }
 
-    // Escape document values before displaying them
+    // Escape document values
     function escapeHtml(value) {
+
         return String(value ?? '').replace(/[&<>"']/g, function(char) {
+
             return {
                 '&': '&amp;',
                 '<': '&lt;',
@@ -281,12 +693,89 @@
                 '"': '&quot;',
                 "'": '&#039;'
             }[char];
+
         });
+    }
+
+    // Store documents for searching
+    let allDocuments = [];
+
+    // Calculate remaining days
+    function calculateDaysRemaining(expiryDate) {
+
+        if (!expiryDate) {
+            return null;
+        }
+
+        const today = new Date();
+
+        const todayUTC = Date.UTC(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate()
+        );
+
+        const parts = expiryDate.substring(0, 10).split('-');
+
+        if (parts.length !== 3 || parts.some(part => !/^\d+$/.test(part))) {
+            return null;
+        }
+
+        const expiryUTC = Date.UTC(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+        );
+
+        return Math.round(
+            (expiryUTC - todayUTC) / (1000 * 60 * 60 * 24)
+        );
+    }
+
+    // Get document expiry status
+    function getDocumentStatus(expiryDate) {
+
+        const remainingDays = calculateDaysRemaining(expiryDate);
+
+        if (remainingDays === null) {
+            return {
+                text: 'Unknown',
+                className: 'status-expired',
+                remainingDays: '-'
+            };
+        }
+
+        if (remainingDays < 0) {
+    const daysAgo = Math.abs(remainingDays);
+
+    return {
+        text: 'Expired',
+        className: 'status-expired',
+        remainingDays: daysAgo + (daysAgo === 1 ? ' day ago' : ' days ago')
+    };
+}
+
+        if (remainingDays <= 30) {
+            return {
+                text: 'Expiring Soon',
+                className: 'status-upcoming',
+                remainingDays: remainingDays + ' days'
+            };
+        }
+
+        return {
+            text: 'Active',
+            className: 'status-active',
+remainingDays: Math.abs(remainingDays) +
+    (Math.abs(remainingDays) === 1 ? ' day ago' : ' days ago')
+        };
     }
 
     // Load dashboard statistics
     async function loadStatistics() {
+
         try {
+
             const response = await fetch('/api/documents/statistics', {
                 headers: {
                     'Accept': 'application/json',
@@ -303,6 +792,7 @@
             const result = await readJson(response);
 
             if (response.ok) {
+
                 document.getElementById('total').textContent =
                     result.total_documents ?? 0;
 
@@ -314,6 +804,7 @@
 
                 document.getElementById('expired').textContent =
                     result.expired_documents ?? 0;
+
             }
 
         } catch (error) {
@@ -323,7 +814,9 @@
 
     // Logout
     async function logout() {
+
         try {
+
             await fetch('/api/logout', {
                 method: 'POST',
                 headers: {
@@ -331,6 +824,7 @@
                     'Authorization': 'Bearer ' + token
                 }
             });
+
         } catch (error) {
             console.error(error);
         }
@@ -341,9 +835,27 @@
 
     // Add new document
     const documentForm = document.getElementById('documentForm');
+    // Prevent expiry date from being earlier than issue date
+const issueDateInput = document.getElementById('issue_date');
+const expiryDateInput = document.getElementById('expiry_date');
+
+issueDateInput.addEventListener('change', function () {
+    expiryDateInput.min = this.value;
+
+    if (expiryDateInput.value && expiryDateInput.value < this.value) {
+        expiryDateInput.value = '';
+    }
+});
+expiryDateInput.addEventListener('change', function () {
+    if (issueDateInput.value && this.value < issueDateInput.value) {
+        alert('Expiry date cannot be earlier than issue date.');
+        this.value = '';
+    }
+});
     const documentMessage = document.getElementById('documentMessage');
 
     documentForm.addEventListener('submit', async function(e) {
+
         e.preventDefault();
 
         const formData = new FormData(documentForm);
@@ -358,6 +870,7 @@
         };
 
         try {
+
             const response = await fetch('/api/documents', {
                 method: 'POST',
                 headers: {
@@ -371,7 +884,8 @@
             const result = await readJson(response);
 
             if (response.ok) {
-                documentMessage.style.color = 'green';
+
+                documentMessage.style.color = '#15803d';
                 documentMessage.textContent =
                     'Document added successfully!';
 
@@ -381,22 +895,108 @@
                 await loadDocuments();
 
             } else {
-                documentMessage.style.color = 'red';
+
+                documentMessage.style.color = '#dc2626';
                 documentMessage.textContent =
                     result.message || 'Failed to add document.';
+
             }
 
         } catch (error) {
+
             console.error('Document error:', error);
 
-            documentMessage.style.color = 'red';
+            documentMessage.style.color = '#dc2626';
             documentMessage.textContent = error.message;
+
         }
+
     });
+
+    // Display documents in table
+    function displayDocuments(documents) {
+
+        const documentsList =
+            document.getElementById('documentsList');
+
+        if (!documents || documents.length === 0) {
+
+            documentsList.innerHTML = `
+                <tr>
+                    <td colspan="8" class="empty-message">
+                        No documents found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        documentsList.innerHTML = '';
+
+        documents.forEach(function(doc) {
+
+            const expiryDate = doc.expiry_date
+                ? doc.expiry_date.substring(0, 10)
+                : '';
+
+            const status = getDocumentStatus(expiryDate);
+
+            documentsList.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        <strong>${escapeHtml(doc.document_name)}</strong>
+                    </td>
+
+                    <td>${escapeHtml(doc.document_type)}</td>
+
+                    <td>${escapeHtml(doc.document_number || '-')}</td>
+
+                    <td>
+                        ${escapeHtml(
+                            doc.issue_date
+                                ? doc.issue_date.substring(0, 10)
+                                : '-'
+                        )}
+                    </td>
+
+                    <td>${escapeHtml(expiryDate || '-')}</td>
+
+                    <td>${escapeHtml(status.remainingDays)}</td>
+
+                    <td>
+                        <span class="status ${status.className}">
+                            ${status.text}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button class="edit-btn"
+                            onclick="editDocument(${Number(doc.id)})">
+                            Edit
+                        </button>
+
+                        <button class="delete-btn"
+                            onclick="deleteDocument(${Number(doc.id)})">
+                            Delete
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+    }
 
     // Load all saved documents
     async function loadDocuments() {
+
         try {
+
             const response = await fetch('/api/documents', {
                 headers: {
                     'Accept': 'application/json',
@@ -404,54 +1004,56 @@
                 }
             });
 
+            if (response.status === 401) {
+                localStorage.removeItem('auth_token');
+                window.location.href = '/';
+                return;
+            }
+
             const documents = await readJson(response);
 
-            const documentsList =
-                document.getElementById('documentsList');
-
             if (!response.ok) {
-                documentsList.innerHTML =
-                    '<tr><td colspan="7">Failed to load documents.</td></tr>';
-                return;
+                throw new Error('Failed to load documents.');
             }
 
-            if (documents.length === 0) {
-                documentsList.innerHTML =
-                    '<tr><td colspan="7">No documents found.</td></tr>';
-                return;
-            }
+            allDocuments = documents;
 
-            documentsList.innerHTML = '';
-
-            documents.forEach(function(doc) {
-
-                documentsList.innerHTML += `
-                    <tr>
-                        <td>${escapeHtml(doc.document_name)}</td>
-                        <td>${escapeHtml(doc.document_type)}</td>
-                        <td>${escapeHtml(doc.document_number || '-')}</td>
-                        <td>${escapeHtml(doc.issue_date ? doc.issue_date.substring(0, 10) : '-')}</td>
-                        <td>${escapeHtml(doc.expiry_date ? doc.expiry_date.substring(0, 10) : '-')}</td>
-                        <td>${escapeHtml(doc.reminder_days)}</td>
-
-                        <td>
-                            <button onclick="editDocument(${Number(doc.id)})"
-                                style="background:green;">
-                                Edit
-                            </button>
-
-                            <button onclick="deleteDocument(${Number(doc.id)})">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
+            displayDocuments(allDocuments);
 
         } catch (error) {
+
             console.error('Load documents error:', error);
+
+            document.getElementById('documentsList').innerHTML = `
+                <tr>
+                    <td colspan="8" class="empty-message">
+                        Failed to load documents.
+                    </td>
+                </tr>
+            `;
+
         }
     }
+
+    // Search documents
+    document.getElementById('searchInput')
+        .addEventListener('input', function() {
+
+            const searchValue = this.value.toLowerCase();
+
+            const filteredDocuments = allDocuments.filter(function(doc) {
+
+                return (
+                    String(doc.document_name || '').toLowerCase().includes(searchValue) ||
+                    String(doc.document_type || '').toLowerCase().includes(searchValue) ||
+                    String(doc.document_number || '').toLowerCase().includes(searchValue)
+                );
+
+            });
+
+            displayDocuments(filteredDocuments);
+
+        });
 
     // Delete document
     async function deleteDocument(id) {
@@ -461,6 +1063,7 @@
         }
 
         try {
+
             const response = await fetch(`/api/documents/${id}`, {
                 method: 'DELETE',
                 headers: {
@@ -470,17 +1073,22 @@
             });
 
             if (response.ok) {
+
                 alert('Document deleted successfully!');
 
                 await loadDocuments();
                 await loadStatistics();
 
             } else {
+
                 alert('Failed to delete document.');
+
             }
 
         } catch (error) {
+
             console.error('Delete error:', error);
+
         }
     }
 
@@ -488,6 +1096,7 @@
     async function editDocument(id) {
 
         try {
+
             const response = await fetch(`/api/documents/${id}`, {
                 headers: {
                     'Accept': 'application/json',
@@ -525,6 +1134,11 @@
                 doc.expiry_date ? doc.expiry_date.substring(0, 10) : ''
             );
             if (expiryDate === null) return;
+            // Validate issue date and expiry date
+if (issueDate && expiryDate && expiryDate < issueDate) {
+    alert('Expiry date cannot be earlier than issue date.');
+    return;
+}
 
             const reminderDays = prompt(
                 'Reminder Days:',
@@ -552,18 +1166,23 @@
             const result = await readJson(updateResponse);
 
             if (updateResponse.ok) {
+
                 alert('Document updated successfully!');
 
                 await loadDocuments();
                 await loadStatistics();
 
             } else {
+
                 alert(result.message || 'Failed to update document.');
+
             }
 
         } catch (error) {
+
             console.error('Edit error:', error);
             alert(error.message);
+
         }
     }
 
