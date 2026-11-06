@@ -24,7 +24,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 245px;
             background: #172554;
@@ -79,7 +78,6 @@
             background: #dc2626;
         }
 
-        /* Main content */
         .main {
             flex: 1;
             min-width: 0;
@@ -123,7 +121,6 @@
             font-size: 14px;
         }
 
-        /* Buttons */
         button {
             border: none;
             padding: 11px 17px;
@@ -144,6 +141,21 @@
             background: #2563eb;
         }
 
+        /* PDF Report Button */
+        .report-btn {
+            background: #2563eb;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+        }
+
+        .report-btn:hover {
+            background: #172554;
+        }
+
         .edit-btn {
             background: #0d9488;
             padding: 8px 12px;
@@ -154,7 +166,6 @@
             padding: 8px 12px;
         }
 
-        /* Statistics */
         .cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -229,7 +240,6 @@
             color: #172554;
         }
 
-        /* General panels */
         .panel {
             background: white;
             padding: 25px;
@@ -254,7 +264,6 @@
             color: #94a3b8;
         }
 
-        /* Form */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -293,7 +302,6 @@
             font-size: 13px;
         }
 
-        /* Search */
         .table-heading {
             display: flex;
             justify-content: space-between;
@@ -306,7 +314,6 @@
             max-width: 260px;
         }
 
-        /* Table */
         .table-wrapper {
             overflow-x: auto;
         }
@@ -314,7 +321,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 850px;
+            min-width: 950px;
         }
 
         th {
@@ -338,7 +345,6 @@
             background: #f8fafc;
         }
 
-        /* Expiry status */
         .status {
             display: inline-block;
             padding: 6px 10px;
@@ -363,6 +369,16 @@
             color: #b91c1c;
         }
 
+        .file-link {
+            color: #2563eb;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .file-link:hover {
+            text-decoration: underline;
+        }
+
         .empty-message {
             text-align: center;
             padding: 30px;
@@ -376,7 +392,6 @@
             padding: 15px;
         }
 
-        /* Responsive design */
         @media (max-width: 1000px) {
             .cards {
                 grid-template-columns: repeat(2, 1fr);
@@ -479,6 +494,7 @@
             <a href="#dashboard" class="active">▦ Dashboard</a>
             <a href="#add-document">＋ Add Document</a>
             <a href="#my-documents">▤ My Documents</a>
+            <a href="/calendar">📅 Calendar</a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -498,6 +514,11 @@
 
             <section class="welcome">
                 <h1>Welcome to Your Dashboard!</h1>
+
+                <button onclick="downloadPDFReport()" class="report-btn">
+                    📄 Download PDF Report
+                </button>
+
                 <p>Manage and track all your important documents in one place.</p>
             </section>
 
@@ -569,19 +590,28 @@
                         </div>
 
                         <div class="form-group">
-    <label>Issue Date</label>
-    <input type="date" name="issue_date" id="issue_date">
-</div>
+                            <label>Issue Date</label>
+                            <input type="date" name="issue_date" id="issue_date">
+                        </div>
 
-<div class="form-group">
-    <label>Expiry Date *</label>
-    <input type="date" name="expiry_date" id="expiry_date" required>
-</div>
+                        <div class="form-group">
+                            <label>Expiry Date *</label>
+                            <input type="date" name="expiry_date"
+                                id="expiry_date" required>
+                        </div>
 
                         <div class="form-group">
                             <label>Reminder Days *</label>
                             <input type="number" name="reminder_days"
                                 value="30" min="1" required>
+                        </div>
+
+                        <!-- Document File Upload -->
+                        <div class="form-group">
+                            <label>Upload Document (PDF / Image)</label>
+                            <input type="file" name="document_file"
+                                id="document_file"
+                                accept=".pdf,.jpg,.jpeg,.png">
                         </div>
 
                     </div>
@@ -627,13 +657,14 @@
                                 <th>Expiry Date</th>
                                 <th>Days Remaining</th>
                                 <th>Status</th>
+                                <th>File</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
 
                         <tbody id="documentsList">
                             <tr>
-                                <td colspan="8" class="empty-message">
+                                <td colspan="9" class="empty-message">
                                     Loading documents...
                                 </td>
                             </tr>
@@ -746,14 +777,16 @@
         }
 
         if (remainingDays < 0) {
-    const daysAgo = Math.abs(remainingDays);
 
-    return {
-        text: 'Expired',
-        className: 'status-expired',
-        remainingDays: daysAgo + (daysAgo === 1 ? ' day ago' : ' days ago')
-    };
-}
+            const daysAgo = Math.abs(remainingDays);
+
+            return {
+                text: 'Expired',
+                className: 'status-expired',
+                remainingDays: daysAgo +
+                    (daysAgo === 1 ? ' day ago' : ' days ago')
+            };
+        }
 
         if (remainingDays <= 30) {
             return {
@@ -766,8 +799,7 @@
         return {
             text: 'Active',
             className: 'status-active',
-remainingDays: Math.abs(remainingDays) +
-    (Math.abs(remainingDays) === 1 ? ' day ago' : ' days ago')
+            remainingDays: remainingDays + ' days'
         };
     }
 
@@ -835,50 +867,46 @@ remainingDays: Math.abs(remainingDays) +
 
     // Add new document
     const documentForm = document.getElementById('documentForm');
+
     // Prevent expiry date from being earlier than issue date
-const issueDateInput = document.getElementById('issue_date');
-const expiryDateInput = document.getElementById('expiry_date');
+    const issueDateInput = document.getElementById('issue_date');
+    const expiryDateInput = document.getElementById('expiry_date');
 
-issueDateInput.addEventListener('change', function () {
-    expiryDateInput.min = this.value;
+    issueDateInput.addEventListener('change', function () {
 
-    if (expiryDateInput.value && expiryDateInput.value < this.value) {
-        expiryDateInput.value = '';
-    }
-});
-expiryDateInput.addEventListener('change', function () {
-    if (issueDateInput.value && this.value < issueDateInput.value) {
-        alert('Expiry date cannot be earlier than issue date.');
-        this.value = '';
-    }
-});
+        expiryDateInput.min = this.value;
+
+        if (expiryDateInput.value && expiryDateInput.value < this.value) {
+            expiryDateInput.value = '';
+        }
+    });
+
+    expiryDateInput.addEventListener('change', function () {
+
+        if (issueDateInput.value && this.value < issueDateInput.value) {
+            alert('Expiry date cannot be earlier than issue date.');
+            this.value = '';
+        }
+    });
+
     const documentMessage = document.getElementById('documentMessage');
 
     documentForm.addEventListener('submit', async function(e) {
 
         e.preventDefault();
 
+        // Collect all form fields, including the uploaded file
         const formData = new FormData(documentForm);
-
-        const data = {
-            document_name: formData.get('document_name'),
-            document_type: formData.get('document_type'),
-            document_number: formData.get('document_number'),
-            issue_date: formData.get('issue_date') || null,
-            expiry_date: formData.get('expiry_date'),
-            reminder_days: Number(formData.get('reminder_days'))
-        };
 
         try {
 
             const response = await fetch('/api/documents', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'Authorization': 'Bearer ' + token
                 },
-                body: JSON.stringify(data)
+                body: formData
             });
 
             const result = await readJson(response);
@@ -923,7 +951,7 @@ expiryDateInput.addEventListener('change', function () {
 
             documentsList.innerHTML = `
                 <tr>
-                    <td colspan="8" class="empty-message">
+                    <td colspan="9" class="empty-message">
                         No documents found.
                     </td>
                 </tr>
@@ -941,6 +969,12 @@ expiryDateInput.addEventListener('change', function () {
                 : '';
 
             const status = getDocumentStatus(expiryDate);
+
+            const fileLink = doc.document_file
+                ? `<a class="file-link"
+                    href="/storage/${escapeHtml(doc.document_file)}"
+                    target="_blank" rel="noopener">View File</a>`
+                : '-';
 
             documentsList.innerHTML += `
 
@@ -971,6 +1005,8 @@ expiryDateInput.addEventListener('change', function () {
                             ${status.text}
                         </span>
                     </td>
+
+                    <td>${fileLink}</td>
 
                     <td>
                         <button class="edit-btn"
@@ -1026,7 +1062,7 @@ expiryDateInput.addEventListener('change', function () {
 
             document.getElementById('documentsList').innerHTML = `
                 <tr>
-                    <td colspan="8" class="empty-message">
+                    <td colspan="9" class="empty-message">
                         Failed to load documents.
                     </td>
                 </tr>
@@ -1134,11 +1170,12 @@ expiryDateInput.addEventListener('change', function () {
                 doc.expiry_date ? doc.expiry_date.substring(0, 10) : ''
             );
             if (expiryDate === null) return;
+
             // Validate issue date and expiry date
-if (issueDate && expiryDate && expiryDate < issueDate) {
-    alert('Expiry date cannot be earlier than issue date.');
-    return;
-}
+            if (issueDate && expiryDate && expiryDate < issueDate) {
+                alert('Expiry date cannot be earlier than issue date.');
+                return;
+            }
 
             const reminderDays = prompt(
                 'Reminder Days:',
@@ -1182,6 +1219,46 @@ if (issueDate && expiryDate && expiryDate < issueDate) {
 
             console.error('Edit error:', error);
             alert(error.message);
+
+        }
+    }
+
+    // Download PDF Report
+    async function downloadPDFReport() {
+
+        try {
+
+            const token = localStorage.getItem('auth_token');
+
+            const response = await fetch('/api/reports/pdf', {
+                headers: {
+                    'Accept': 'application/pdf',
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (!response.ok) {
+                alert('Could not download PDF report.');
+                return;
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'document-report.pdf';
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+
+            console.error('PDF download error:', error);
+            alert('Something went wrong while downloading the PDF.');
 
         }
     }

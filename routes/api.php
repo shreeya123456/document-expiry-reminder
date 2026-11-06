@@ -4,12 +4,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ReportController;
 
 // Authentication Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Download PDF Report
+Route::get('/reports/pdf', [ReportController::class, 'pdf']);
 Route::get('/documents/statistics', [DocumentController::class, 'statistics']);
     // Logout
     Route::post('/logout', [AuthController::class, 'logout']);
