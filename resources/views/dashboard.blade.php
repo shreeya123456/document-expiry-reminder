@@ -1,4 +1,4 @@
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +73,11 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            margin: 3px;
+        }
+
+        button:hover {
+            opacity: 0.85;
         }
 
         label {
@@ -102,6 +107,23 @@
             font-size: 14px;
         }
 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            text-align: left;
+        }
+
+        th {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
         @media (max-width: 600px) {
             header {
                 padding: 18px;
@@ -126,6 +148,7 @@
     <h2>Welcome to Your Dashboard!</h2>
     <p class="subtitle">Manage your important documents in one place.</p>
 
+    <!-- Dashboard Statistics -->
     <div class="cards">
 
         <div class="card">
@@ -152,6 +175,7 @@
 
     <br><br>
 
+    <!-- Add Document Form -->
     <div class="card">
         <h2>Add New Document</h2>
 
@@ -177,7 +201,7 @@
 
             <label>Reminder Days</label>
             <input type="number" name="reminder_days"
-                   value="30" min="1">
+                   value="30" min="1" required>
 
             <button type="submit">Add Document</button>
 
@@ -186,39 +210,44 @@
         <p id="documentMessage"></p>
     </div>
 
-</div>
+    <br><br>
 
-<br><br>
+    <!-- My Documents Table -->
+    <div class="card">
+        <h2>My Documents</h2>
 
-<div class="card">
-    <h2>My Documents</h2>
+        <div style="overflow-x:auto;">
 
-    <div style="overflow-x:auto;">
-        <table border="1" width="100%" cellpadding="10"
-               cellspacing="0" id="documentsTable">
+            <table border="1" cellpadding="10" cellspacing="0"
+                   id="documentsTable">
 
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Document Number</th>
-                    <th>Issue Date</th>
-                    <th>Expiry Date</th>
-                    <th>Reminder Days</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Document Number</th>
+                        <th>Issue Date</th>
+                        <th>Expiry Date</th>
+                        <th>Reminder Days</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-            <tbody id="documentsList">
-                <tr>
-                    <td colspan="6">Loading documents...</td>
-                </tr>
-            </tbody>
+                <tbody id="documentsList">
+                    <tr>
+                        <td colspan="7">Loading documents...</td>
+                    </tr>
+                </tbody>
 
-        </table>
+            </table>
+        </div>
     </div>
+
 </div>
 
 <script>
+
+    // Get authentication token
     const token = localStorage.getItem('auth_token');
 
     if (!token) {
@@ -231,17 +260,28 @@
 
         raw = raw.trim();
 
-        // Remove extra backslash characters before JSON
         raw = raw.replace(/^\\+/, '');
 
         let result = JSON.parse(raw);
 
-        // Handle JSON that is returned as a string
         if (typeof result === 'string') {
             result = JSON.parse(result);
         }
 
         return result;
+    }
+
+    // Escape document values before displaying them
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, function(char) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[char];
+        });
     }
 
     // Load dashboard statistics
@@ -261,8 +301,6 @@
             }
 
             const result = await readJson(response);
-
-            console.log('Statistics:', result);
 
             if (response.ok) {
                 document.getElementById('total').textContent =
@@ -334,11 +372,13 @@
 
             if (response.ok) {
                 documentMessage.style.color = 'green';
-                documentMessage.textContent = 'Document added successfully!';
+                documentMessage.textContent =
+                    'Document added successfully!';
 
                 documentForm.reset();
 
                 await loadStatistics();
+                await loadDocuments();
 
             } else {
                 documentMessage.style.color = 'red';
@@ -353,54 +393,184 @@
             documentMessage.textContent = error.message;
         }
     });
-// Load all saved documents
-async function loadDocuments() {
-    try {
-        const response = await fetch('/api/documents', {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + token
+
+    // Load all saved documents
+    async function loadDocuments() {
+        try {
+            const response = await fetch('/api/documents', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            const documents = await readJson(response);
+
+            const documentsList =
+                document.getElementById('documentsList');
+
+            if (!response.ok) {
+                documentsList.innerHTML =
+                    '<tr><td colspan="7">Failed to load documents.</td></tr>';
+                return;
             }
-        });
 
-        const documents = await readJson(response);
+            if (documents.length === 0) {
+                documentsList.innerHTML =
+                    '<tr><td colspan="7">No documents found.</td></tr>';
+                return;
+            }
 
-        const documentsList = document.getElementById('documentsList');
+            documentsList.innerHTML = '';
 
-        if (!response.ok) {
-            documentsList.innerHTML =
-                '<tr><td colspan="6">Failed to load documents.</td></tr>';
-            return;
+            documents.forEach(function(doc) {
+
+                documentsList.innerHTML += `
+                    <tr>
+                        <td>${escapeHtml(doc.document_name)}</td>
+                        <td>${escapeHtml(doc.document_type)}</td>
+                        <td>${escapeHtml(doc.document_number || '-')}</td>
+                        <td>${escapeHtml(doc.issue_date ? doc.issue_date.substring(0, 10) : '-')}</td>
+                        <td>${escapeHtml(doc.expiry_date ? doc.expiry_date.substring(0, 10) : '-')}</td>
+                        <td>${escapeHtml(doc.reminder_days)}</td>
+
+                        <td>
+                            <button onclick="editDocument(${Number(doc.id)})"
+                                style="background:green;">
+                                Edit
+                            </button>
+
+                            <button onclick="deleteDocument(${Number(doc.id)})">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+        } catch (error) {
+            console.error('Load documents error:', error);
         }
-
-        if (documents.length === 0) {
-            documentsList.innerHTML =
-                '<tr><td colspan="6">No documents found.</td></tr>';
-            return;
-        }
-
-        documentsList.innerHTML = '';
-
-        documents.forEach(function(doc) {
-            documentsList.innerHTML += `
-                <tr>
-                    <td>${doc.document_name}</td>
-                    <td>${doc.document_type}</td>
-                    <td>${doc.document_number || '-'}</td>
-                    <td>${doc.issue_date ? doc.issue_date.substring(0, 10) : '-'}</td>
-                    <td>${doc.expiry_date ? doc.expiry_date.substring(0, 10) : '-'}</td>
-                    <td>${doc.reminder_days}</td>
-                </tr>
-            `;
-        });
-
-    } catch (error) {
-        console.error('Load documents error:', error);
     }
-}
-    // Load statistics when dashboard opens
+
+    // Delete document
+    async function deleteDocument(id) {
+
+        if (!confirm('Are you sure you want to delete this document?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/documents/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (response.ok) {
+                alert('Document deleted successfully!');
+
+                await loadDocuments();
+                await loadStatistics();
+
+            } else {
+                alert('Failed to delete document.');
+            }
+
+        } catch (error) {
+            console.error('Delete error:', error);
+        }
+    }
+
+    // Edit document
+    async function editDocument(id) {
+
+        try {
+            const response = await fetch(`/api/documents/${id}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            const doc = await readJson(response);
+
+            if (!response.ok) {
+                alert('Failed to load document.');
+                return;
+            }
+
+            const name = prompt('Document Name:', doc.document_name);
+            if (name === null) return;
+
+            const type = prompt('Document Type:', doc.document_type);
+            if (type === null) return;
+
+            const number = prompt(
+                'Document Number:',
+                doc.document_number || ''
+            );
+            if (number === null) return;
+
+            const issueDate = prompt(
+                'Issue Date (YYYY-MM-DD):',
+                doc.issue_date ? doc.issue_date.substring(0, 10) : ''
+            );
+            if (issueDate === null) return;
+
+            const expiryDate = prompt(
+                'Expiry Date (YYYY-MM-DD):',
+                doc.expiry_date ? doc.expiry_date.substring(0, 10) : ''
+            );
+            if (expiryDate === null) return;
+
+            const reminderDays = prompt(
+                'Reminder Days:',
+                doc.reminder_days
+            );
+            if (reminderDays === null) return;
+
+            const updateResponse = await fetch(`/api/documents/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({
+                    document_name: name,
+                    document_type: type,
+                    document_number: number || null,
+                    issue_date: issueDate || null,
+                    expiry_date: expiryDate,
+                    reminder_days: Number(reminderDays)
+                })
+            });
+
+            const result = await readJson(updateResponse);
+
+            if (updateResponse.ok) {
+                alert('Document updated successfully!');
+
+                await loadDocuments();
+                await loadStatistics();
+
+            } else {
+                alert(result.message || 'Failed to update document.');
+            }
+
+        } catch (error) {
+            console.error('Edit error:', error);
+            alert(error.message);
+        }
+    }
+
+    // Load data when dashboard opens
     loadStatistics();
     loadDocuments();
+
 </script>
 
 </body>
