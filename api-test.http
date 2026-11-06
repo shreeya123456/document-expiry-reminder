@@ -1,11 +1,13 @@
-
-### 1. Get all documents
 GET http://127.0.0.1:8000/api/documents
 Accept: application/json
+
+
 ### 2. Add a document
 POST http://127.0.0.1:8000/api/documents
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
 
 {
     "document_name": "Citizenship",
@@ -16,13 +18,15 @@ Accept: application/json
     "reminder_days": 30
 }
 ### 3. Get one document
-GET http://127.0.0.1:8000/api/documents/1
+GET http://127.0.0.1:8000/api/documents/8
 Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
 
 ### 4. Update a document
-PUT http://127.0.0.1:8000/api/documents/1
+PUT http://127.0.0.1:8000/api/documents/8
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
 
 {
     "document_name": "National ID",
@@ -34,5 +38,65 @@ Accept: application/json
 }
 
 ### 5. Delete a document
-DELETE http://127.0.0.1:8000/api/documents/1
+DELETE http://127.0.0.1:8000/api/documents/8
 Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
+### 6. Register User
+POST http://127.0.0.1:8000/api/register
+Content-Type: application/json
+Accept: application/json
+
+
+{
+    "name": "Test User",
+    "email": "testuser2@example.com",
+    "password": "password123",
+    "password_confirmation": "password123"
+}
+
+### 7. Login User
+POST http://127.0.0.1:8000/api/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "nshreya218@gmail.com",
+    "password": "12345678"
+}
+### 8. Logout User
+POST http://127.0.0.1:8000/api/logout
+Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
+### Get All Documents
+GET http://127.0.0.1:8000/api/documents
+Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
+### Upcoming Documents
+GET http://127.0.0.1:8000/api/documents/upcoming
+Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
+### Expired Documents
+GET http://127.0.0.1:8000/api/documents/expired
+Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
+### Document Statistics
+GET http://127.0.0.1:8000/api/documents/statistics
+Accept: application/json
+Authorization: Bearer 18|SAUIWnvRpfVdXyaO8BUoM2kkxTqT5tHUWKNOgdqI5d1fcc2d
+
+### Register User
+POST http://127.0.0.1:8000/api/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Test User",
+    "email": "testuser2026@example.com",
+    "password": "password123",
+    "password_confirmation": "password123"
+}
